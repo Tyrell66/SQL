@@ -23,7 +23,7 @@ FROM master.dbo.sysdatabases sysdb
 	LEFT OUTER JOIN msdb.dbo.backupset bkup 
 		ON bkup.database_name = sysdb.name
 
-WHERE backup_finish_date > DATEADD(DAY, -60, (getdate()))  -- Last 2 days
+WHERE backup_finish_date > DATEADD(DAY, -60, (getdate()))  -- Last 60 days
 	AND sysdb.name = 'Cadis_DB'
 
 ORDER BY sysdb.name, bkup.backup_finish_date DESC
