@@ -28,3 +28,4 @@ WHERE backup_finish_date > DATEADD(DAY, -60, (getdate()))  -- Last 60 days
 
 ORDER BY sysdb.name, bkup.backup_finish_date DESC
 GO
+--
