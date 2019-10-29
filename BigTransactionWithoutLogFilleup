@@ -7,7 +7,8 @@ SET @continue = 1
 WHILE @continue = 1
 BEGIN
     PRINT GETDATE()
-    SET ROWCOUNT 2000
+    -- Must be less than 4999 in order to avoid table lock escalation.
+    SET ROWCOUNT 4950
     BEGIN TRANSACTION
       DELETE FROM some_big_table WHERE -- statement
       SET @rowcount = @@rowcount 
