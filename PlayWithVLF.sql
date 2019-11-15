@@ -1,5 +1,7 @@
 /*************************
 The following queries below shows you the stust of the Virtual Log Files in a DB
+
+There is also a good example of CTE (Common Table Expressions)
 */////
 
 
