@@ -1,3 +1,4 @@
+-- Source: https://stackoverflow.com/questions/7197574/script-to-kill-all-connections-to-a-database-more-than-restricted-user-rollback
 ------ For MS SQL Server 2012 and above
 
 USE [master];
