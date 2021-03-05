@@ -12,8 +12,16 @@ URL for this script: http://www.sqlservercentral.com/scripts/login/138379/
 Author: S. Kusen
 
 Updates:
-2017-07-10 v4.3:
-I was unable to easily get this into a stored procedure / powershell script, so this update includes the changes/updates noted here:
+
+2019-06-10 v4.5:
+    1. T. Bradley suggested fix for verifying that role permissions and execute rights on new roles included.  
+		Line 302 updated to include the type R, as:
+		AND [usr].[type] IN ('G', 'S', 'U', 'R') -- S = SQL user, U = Windows user, G = Windows group
+
+2018-06-06 V4.4:
+	1. Incorporated bshimonov's suggestion to not create the dbo user since it is unnecessary.
+
+2017-07-10 v4.3: 
 	1. Incorporated Andrew G's updates from previous feedback (Much delayed to being updated on the main script page).  Thanks Andrew!
 	2. danmeskel2002 recommended a fix for the SID issue for "SQL User without login".   
 		Changed this line:
@@ -68,7 +76,7 @@ INSERT INTO ##tbl_db_principals_statements (stmt, result_order)
          3.1 AS [-- RESULT ORDER HOLDER --]
    FROM   sys.database_principals AS rm
    WHERE [type] IN (''U'', ''S'', ''G'') /* windows users, sql users, windows groups */
-     AND NAME <> ''guest''')
+     AND NAME NOT IN (''guest'',''dbo'')')
 
 ELSE IF ((SELECT SUBSTRING(convert(sysname, SERVERPROPERTY('productversion')), 1, charindex('.',convert(sysname, SERVERPROPERTY('productversion')))-1)) IN (9,10))
 EXEC ('
@@ -77,7 +85,7 @@ INSERT INTO ##tbl_db_principals_statements (stmt, result_order)
          3.1 AS [-- RESULT ORDER HOLDER --]
    FROM   sys.database_principals AS rm
    WHERE [type] IN (''U'', ''S'', ''G'') /* windows users, sql users, windows groups */
-   AND NAME <> ''guest''')
+   AND NAME NOT IN (''guest'',''dbo'')')
 
 --SELECT * FROM ##tbl_db_principals_statements
 
@@ -291,7 +299,7 @@ FROM   sys.database_permissions AS perm
 
 WHERE   [perm].[major_id] = 0
    AND [usr].[principal_id] > 4 -- 0 to 4 are system users/schemas
-   AND [usr].[type] IN ('G', 'S', 'U') -- S = SQL user, U = Windows user, G = Windows group
+   AND [usr].[type] IN ('G', 'S', 'U', 'R') -- S = SQL user, U = Windows user, G = Windows group
 
 UNION
 
